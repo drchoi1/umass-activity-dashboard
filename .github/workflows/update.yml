@@ -12,7 +12,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Check Eastern run time
         id: timecheck
         run: |
@@ -26,7 +26,7 @@ jobs:
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:
               f.write('run='+('yes' if run else 'no')+'\n')
           PY
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         if: steps.timecheck.outputs.run == 'yes' || github.event_name == 'workflow_dispatch'
         with:
           python-version: '3.12'
