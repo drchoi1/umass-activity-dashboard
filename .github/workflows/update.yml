@@ -12,24 +12,22 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Check Eastern run time
+      - uses: actions/checkout@v6
+      - name: Check Eastern hour
         id: timecheck
         run: |
           python - <<'PY'
           from datetime import datetime
           from zoneinfo import ZoneInfo
           import os
-          n=datetime.now(ZoneInfo('America/New_York'))
-          run=n.hour in (8,20)
-          print('Eastern:',n.isoformat(),'run:',run)
-          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
-              f.write('run='+('yes' if run else 'no')+'\n')
+          n=datetime.now(ZoneInfo("America/New_York")); run=n.hour in (8,20)
+          print("Eastern:",n.isoformat(),"run:",run)
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:f.write("run="+("yes" if run else "no")+"\n")
           PY
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         if: steps.timecheck.outputs.run == 'yes' || github.event_name == 'workflow_dispatch'
         with:
-          python-version: '3.12'
+          python-version: "3.12"
           cache: pip
       - name: Install dependencies
         if: steps.timecheck.outputs.run == 'yes' || github.event_name == 'workflow_dispatch'
@@ -39,7 +37,7 @@ jobs:
       - name: Build dashboard
         if: steps.timecheck.outputs.run == 'yes' || github.event_name == 'workflow_dispatch'
         run: python update_dashboard.py
-      - name: Commit generated page and caches
+      - name: Commit generated page
         if: steps.timecheck.outputs.run == 'yes' || github.event_name == 'workflow_dispatch'
         run: |
           git config user.name "umass-dashboard-bot"
