@@ -1,0 +1,38 @@
+{
+  "source_updated": "seeded 2026-09-09",
+  "days": {
+    "Monday": [
+      {"name":"Slow Flow Yoga 60","start":"4:00pm","end":"5:00pm","room":"Room 210"},
+      {"name":"Pilates 60","start":"6:30pm","end":"7:30pm","room":"Room 215"},
+      {"name":"Yin Yoga 60","start":"7:30pm","end":"8:30pm","room":"Room 210"},
+      {"name":"Zumba 60","start":"7:45pm","end":"8:45pm","room":"Room 215"}
+    ],
+    "Tuesday": [
+      {"name":"Pilates 60","start":"4:30pm","end":"5:30pm","room":"Room 215"},
+      {"name":"Vinyasa Yoga 60","start":"6:45pm","end":"7:45pm","room":"Room 210"},
+      {"name":"Pilates 60","start":"8:00pm","end":"9:00pm","room":"Room 210"}
+    ],
+    "Wednesday": [
+      {"name":"Pilates 60","start":"4:15pm","end":"5:15pm","room":"Room 215"},
+      {"name":"Zumba 60","start":"5:15pm","end":"6:15pm","room":"Room 118"},
+      {"name":"Vinyasa Yoga 60","start":"6:30pm","end":"7:30pm","room":"Room 210"},
+      {"name":"Pilates 60","start":"6:30pm","end":"7:30pm","room":"Room 215"}
+    ],
+    "Thursday": [
+      {"name":"Pilates 60","start":"3:30pm","end":"4:30pm","room":"Room 215"},
+      {"name":"Slow Flow Yoga 60","start":"4:00pm","end":"5:00pm","room":"Room 210"},
+      {"name":"Zumba 60","start":"5:45pm","end":"6:45pm","room":"Room 118"},
+      {"name":"Pilates 60","start":"6:00pm","end":"7:00pm","room":"Room 215"}
+    ],
+    "Friday": [],
+    "Saturday": [
+      {"name":"Pilates 60","start":"3:00pm","end":"4:00pm","room":"Room 215"}
+    ],
+    "Sunday": [
+      {"name":"Pilates 60","start":"12:15pm","end":"1:15pm","room":"Room 215"},
+      {"name":"Vinyasa Yoga 60","start":"12:15pm","end":"1:15pm","room":"Room 210"},
+      {"name":"Pilates 60","start":"4:15pm","end":"5:15pm","room":"Room 215"},
+      {"name":"Zumba 60","start":"5:30pm","end":"6:30pm","room":"Room 215"}
+    ]
+  }
+}

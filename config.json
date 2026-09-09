@@ -1,0 +1,18 @@
+{
+  "timezone": "America/New_York",
+  "interested_classes": ["Pilates 60", "Vinyasa Yoga 60", "Slow Flow Yoga 60", "Zumba 60", "Yin Yoga 60"],
+  "program_urls": {
+    "Pilates 60": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d",
+    "Vinyasa Yoga 60": "https://recwell.umass.edu/program/GetProgramDetails?courseId=cd0da8a0-a624-48ef-9576-70cafb46b4ae",
+    "Slow Flow Yoga 60": "https://recwell.umass.edu/program/GetProgramDetails?courseId=fe34e8c6-32a9-4de2-9926-b0c93dfef03a",
+    "Zumba 60": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=5f1c880c-f517-4eaa-887f-c99c7dc7e9f4",
+    "Yin Yoga 60": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=8afd745c-6ef4-4156-98a1-5d84463f8908"
+  },
+  "sources": {
+    "ice": "https://www.mullinscenter.com/mullins-community-ice-center/public-skating",
+    "ice_finnly": "https://mullinscenter.finnlyconnect.com/schedule/428",
+    "fitness": "https://www.umass.edu/recwell/group-fitness-schedule-1",
+    "hours": "https://www.umass.edu/recwell/facilities/hours-operation",
+    "alerts": "https://www.umass.edu/recwell/"
+  }
+}
