@@ -1,5 +1,5 @@
 {
-  "source_updated": "2026-09-09T23:03:25.482657-04:00",
+  "source_updated": "2026-09-09T23:24:38.716979-04:00",
   "days": {
     "Monday": [
       {
@@ -7,21 +7,21 @@
         "start": "12:15pm",
         "end": "1:15pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       },
       {
         "name": "Slow Flow Yoga 60",
         "start": "4:00pm",
         "end": "5:00pm",
         "room": "Room 210",
-        "url": "https://recwell.umass.edu/program/GetProgramDetails?courseId=466671b3-24f8-4b42-84cd-064008d5e386"
+        "url": "https://recwell.umass.edu/program/GetProgramDetails?courseId=fe34e8c6-32a9-4de2-9926-b0c93dfef03a"
       },
       {
         "name": "Pilates 60",
         "start": "6:30pm",
         "end": "7:30pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       },
       {
         "name": "Yin Yoga 60",
@@ -44,21 +44,21 @@
         "start": "4:30pm",
         "end": "5:30pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       },
       {
         "name": "Vinyasa Yoga 60",
         "start": "6:45pm",
         "end": "7:45pm",
         "room": "Room 210",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=0fb7e2a4-2846-4a40-a76f-ed0f694b1596"
+        "url": "https://recwell.umass.edu/program/GetProgramDetails?courseId=cd0da8a0-a624-48ef-9576-70cafb46b4ae"
       },
       {
         "name": "Pilates 60",
         "start": "8:00pm",
         "end": "9:00pm",
         "room": "Room 210",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       }
     ],
     "Wednesday": [
@@ -67,7 +67,7 @@
         "start": "4:15pm",
         "end": "5:15pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       },
       {
         "name": "Zumba 60",
@@ -81,14 +81,14 @@
         "start": "6:30pm",
         "end": "7:30pm",
         "room": "Room 210",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=0fb7e2a4-2846-4a40-a76f-ed0f694b1596"
+        "url": "https://recwell.umass.edu/program/GetProgramDetails?courseId=cd0da8a0-a624-48ef-9576-70cafb46b4ae"
       },
       {
         "name": "Pilates 60",
         "start": "6:30pm",
         "end": "7:30pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       }
     ],
     "Thursday": [
@@ -97,14 +97,14 @@
         "start": "3:30pm",
         "end": "4:30pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       },
       {
         "name": "Slow Flow Yoga 60",
         "start": "4:00pm",
         "end": "5:00pm",
         "room": "Room 210",
-        "url": "https://recwell.umass.edu/program/GetProgramDetails?courseId=466671b3-24f8-4b42-84cd-064008d5e386"
+        "url": "https://recwell.umass.edu/program/GetProgramDetails?courseId=fe34e8c6-32a9-4de2-9926-b0c93dfef03a"
       },
       {
         "name": "Zumba 60",
@@ -118,7 +118,7 @@
         "start": "6:00pm",
         "end": "7:00pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       }
     ],
     "Friday": [],
@@ -128,7 +128,7 @@
         "start": "3:00pm",
         "end": "4:00pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       }
     ],
     "Sunday": [
@@ -137,21 +137,21 @@
         "start": "12:15pm",
         "end": "1:15pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       },
       {
         "name": "Vinyasa Yoga 60",
         "start": "12:15pm",
         "end": "1:15pm",
         "room": "Room 210",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=0fb7e2a4-2846-4a40-a76f-ed0f694b1596"
+        "url": "https://recwell.umass.edu/program/GetProgramDetails?courseId=cd0da8a0-a624-48ef-9576-70cafb46b4ae"
       },
       {
         "name": "Pilates 60",
         "start": "4:15pm",
         "end": "5:15pm",
         "room": "Room 215",
-        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=4e5b7d85-5d08-483c-bcc2-1978b1068b46"
+        "url": "https://recwell.umass.edu/Program/GetProgramDetails?courseId=e268df5f-4e5a-4145-a395-67d8fb7a7e5d"
       },
       {
         "name": "Zumba 60",
