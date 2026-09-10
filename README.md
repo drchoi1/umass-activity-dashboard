@@ -8,7 +8,7 @@ Mobile-first GitHub Pages dashboard for:
 - live public spot availability
 - RecWell facility alerts
 
-The page updates at about **8 AM and 8 PM Eastern every day**, including weekends and holidays. The weekly group-fitness timetable is re-read on **Monday morning**.
+The page updates at about **8 AM and 8 PM Eastern every day**, including weekends and holidays. The group-fitness timetable is re-read on every update; a failed parse keeps the last known-good schedule.
 
 ## Deploy
 
@@ -37,9 +37,6 @@ No API keys, OAuth, Google account authorization, Google Cloud, or GitHub secret
 - today's selected group-fitness availability
 - page timestamp
 
-### Monday around 8 AM
-Also re-reads the public weekly group-fitness schedule. If parsing looks incomplete, it keeps the last good cached schedule.
-
 ### Around 8 PM every day
 Rechecks the dynamic sources and availability and rewrites the page.
 
@@ -64,7 +61,7 @@ Each class row links directly to that class's public RecWell registration page.
 - `config.json` — sources, class preferences, reservation URLs
 - `data/group_schedule.json` — last good weekly fitness schedule
 - `data/availability.json` — availability cache
-- `data/state.json` — last-run diagnostics
+- `data/state.json` — last-run diagnostics, including scraper errors and class count
 - `.github/workflows/update.yml` — twice-daily automation
 
 ## First-version caveat
