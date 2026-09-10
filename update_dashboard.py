@@ -4,6 +4,7 @@ import html, json, re
 from pathlib import Path
 from datetime import datetime, date, timedelta
 from zoneinfo import ZoneInfo
+from urllib.parse import parse_qs, urlparse
 import requests
 from bs4 import BeautifulSoup
 
@@ -46,30 +47,45 @@ def regular_hours(d):
 
 ALERT_CATEGORIES=('gym','rock','pools','fitness')
 
-def classify_alerts(page_html):
-    """Extract the homepage alert and keep schedule lines under their facility heading."""
-    lines=[norm(x) for x in BeautifulSoup(page_html,'html.parser').get_text('\n').splitlines() if norm(x)]
-    start=next((i for i,x in enumerate(lines) if 'facility alert:' in x.lower()),None)
+def alert_date_range(line,today):
+    matches=list(DATE_RE.finditer(line.split('|',1)[0]))
+    if not matches:return None
+    year=next((int(m.group(3)) for m in reversed(matches) if m.group(3)),today.year)
+    parsed=[]
+    for m in matches[:2]:
+        try:parsed.append(datetime.strptime(f'{m.group(1)} {m.group(2)} {m.group(3) or year}','%B %d %Y').date())
+        except ValueError:return None
+    return parsed[0],parsed[-1]
+
+def classify_alerts(page_html,today=TODAY):
+    """Parse only the typed alert paragraph, using its underlined headings as boundaries."""
+    soup=BeautifulSoup(page_html,'html.parser')
     out={k:[] for k in ALERT_CATEGORIES}
-    if start is None:return out
+    marker=next((x for x in soup.find_all(['strong','h3']) if 'facility alert:' in norm(x.get_text(' ',strip=True)).lower()),None)
+    if marker is None:return out
+    container=marker.find_parent(class_='wysiwyg-content') or marker.parent
+    alert_heading=marker if marker.name=='h3' else marker.find_parent('h3')
+    alert_body=alert_heading.find_next_sibling('p') if alert_heading else None
+    if alert_body is None or alert_body not in container.descendants:return out
+    typed={norm(x.get_text(' ',strip=True)).rstrip(':').lower() for x in alert_body.select('strong u')}
+    for br in alert_body.find_all('br'):br.replace_with('\n')
+    lines=[norm(x) for x in alert_body.get_text('',strip=False).splitlines() if norm(x)]
     context=None
-    for line in lines[start:start+100]:
-        low=line.lower()
-        if line != lines[start] and (low.startswith('recwell fall semester hours') or low in (
-            'quick links','recreation and wellbeing','recwell','contact us','hours of operation'
-        )):break
-        heading=low.rstrip(':')
-        if heading in ('pools','pool') or re.fullmatch(r'(boyden|hicks) pool',heading):context='pools'
-        elif heading in ('rockwell','rock wall') or re.search(r'\b(climbing|bouldering)\b',heading):context='rock'
-        elif heading in ('group fitness','group fitness classes'):context='fitness'
-        elif heading in ('recreation center','recreation centers','gym'):context='gym'
-        if line == lines[start]:
-            targets=[k for k in ALERT_CATEGORIES if re.search({
-                'gym':r'recreation|recwell|gym','rock':r'rockwell|climb','pools':r'pool|swim|aquatic|boyden|hicks','fitness':r'fitness'
-            }[k],low)] or list(ALERT_CATEGORIES)
-            for k in targets:out[k].append(line)
-        elif context:
-            out[context].append(line)
+    pool_name=None
+    for line in lines:
+        heading=line.rstrip(':').lower()
+        if heading in typed:
+            if heading in ('recreation center','recreation centers'):context='gym';pool_name=None
+            elif heading in ('pools','pool'):context='pools';pool_name=None
+            elif heading in ('rockwell','rock wall'):context='rock';pool_name=None
+            elif heading in ('group fitness','group fitness classes'):context='fitness';pool_name=None
+            elif heading in ('boyden pool','hicks pool'):pool_name=line.rstrip(':')
+            continue
+        span=alert_date_range(line,today)
+        if context and span and span[1]>=today:
+            item={'start':span[0].isoformat(),'end':span[1].isoformat(),'text':line}
+            if pool_name:item['facility']=pool_name
+            out[context].append(item)
     return out
 
 def facility_alerts():
@@ -97,7 +113,7 @@ def parse_schedule(page_html):
             elif line.startswith('Afternoon |'):section='Afternoon'
             elif line.startswith('Evening |'):section='Evening'
             elif line in days:day=line
-            elif line in WANTED and day and section:
+            elif line in WANTED and day and section in ('Afternoon','Evening'):
                 window=lines[i+1:i+9]; tm=next((TIME_RE.search(x) for x in window if TIME_RE.search(x)),None)
                 if not tm:continue
                 room=next((ROOM_RE.search(x).group(0) for x in window if ROOM_RE.search(x)),'')
@@ -171,24 +187,37 @@ def spot_text(body,start,target_date=None):
 
 def classes_for(schedule,d):return schedule.get('days',{}).get(d.strftime('%A'),[])
 
+def program_id(url):
+    values=parse_qs(urlparse(url).query)
+    return (values.get('courseId') or values.get('courseid') or [None])[0]
+
+def parse_availability_html(page_html):
+    found={};soup=BeautifulSoup(page_html,'html.parser')
+    for card in soup.select('.card[data-instance-dates][data-instance-times]'):
+        try:d=datetime.strptime(card['data-instance-dates'],'%A, %B %d, %Y').date()
+        except (KeyError,ValueError):continue
+        start=card.get('data-instance-times','').split('-',1)[0].strip()
+        spots=card.select_one('.spots-tag')
+        if start and spots:found[(d.isoformat(),ptime(start))]=norm(spots.get_text(' ',strip=True))
+    return found
+
 def update_availability(schedule):
-    from playwright.sync_api import sync_playwright
     cache=load(DATA/'availability.json',{})
-    dates=[TODAY,TODAY+timedelta(days=1)] if NOW.hour<14 else [TODAY+timedelta(days=1),TODAY+timedelta(days=2)]
-    with sync_playwright() as p:
-        b=p.chromium.launch(headless=True)
-        for d in dates:
-            dk=d.isoformat(); dc=cache.get(dk,{})
-            for c in classes_for(schedule,d):
-                key=f"{c['name']}|{c['start']}"; url=c.get('url',SRC['fitness'])
-                if 'getprogramdetails' not in url.lower():
-                    dc.setdefault(key,{'availability':'Reservation link unavailable','checked_at':NOW.isoformat()});continue
-                try:
-                    pg=b.new_page();pg.goto(url,wait_until='networkidle',timeout=70000);pg.wait_for_timeout(1800)
-                    dc[key]={'availability':spot_text(pg.locator('body').inner_text(),c['start'],d) or 'Availability unavailable','checked_at':NOW.isoformat()};pg.close()
-                except Exception:dc.setdefault(key,{'availability':'Availability unavailable','checked_at':NOW.isoformat()})
-            cache[dk]=dc
-        b.close()
+    dates=[TODAY+timedelta(days=i) for i in range(3)]
+    sources={}
+    for d in dates:
+        for c in classes_for(schedule,d):
+            pid=program_id(c.get('url',''))
+            if pid:sources.setdefault(pid,[]).append((d,c))
+    for pid,classes in sources.items():
+        try:
+            page=fetch(f'https://recwell.umass.edu/Program/GetProgramInstances?programID={pid}')
+            found=parse_availability_html(page)
+        except Exception:found={}
+        for d,c in classes:
+            dk=d.isoformat();key=f"{c['name']}|{c['start']}"
+            val=found.get((dk,ptime(c['start'])),'Availability unavailable')
+            cache.setdefault(dk,{})[key]={'availability':val,'checked_at':NOW.isoformat()}
     save(DATA/'availability.json',cache);return cache
 
 def snapshot(schedule,skating,alerts):
@@ -220,7 +249,9 @@ def render(schedule,av,skating,alerts,flags,skerr,serr):
         skate=' · '.join(skating.get(k,[])) or ('No public skating listed' if not skerr else 'Schedule check unavailable')
         fit=[]
         for c in classes_for(schedule,d):
-            entry=av.get(k,{}).get(f"{c['name']}|{c['start']}",{});val=entry.get('availability','Not checked yet');checked=''
+            entry=av.get(k,{}).get(f"{c['name']}|{c['start']}",{})
+            fallback='Class date passed' if d<TODAY else 'Check opens 48h before'
+            val=entry.get('availability',fallback);checked=''
             if entry.get('checked_at'):
                 try:checked=' · checked '+datetime.fromisoformat(entry['checked_at']).astimezone(TZ).strftime('%-I:%M %p')
                 except Exception:pass
@@ -232,14 +263,17 @@ def render(schedule,av,skating,alerts,flags,skerr,serr):
             cls=' changed' if key in changed_hours else ''
             return f'<div class="mini{cls}"><span>{label}</span><b>{esc(val)}</b></div>'
         def alert_list(category):
-            items=alerts.get(category,[])
-            return '<ul class="alerts">'+''.join(f'<li>{esc(x)}</li>' for x in items)+'</ul>' if items else ''
+            items=[x for x in alerts.get(category,[]) if x.get('start','9999')<=k<=x.get('end','0000')]
+            def message(x):
+                detail=x['text'].split('|',1)[1].strip() if '|' in x['text'] else x['text']
+                return f"{x['facility']}: {detail}" if x.get('facility') else detail
+            return '<ul class="alerts">'+''.join(f'<li>{esc(message(x))}</li>' for x in items)+'</ul>' if items else ''
         sc=' changed' if f.get('skating') else '';fc=' changed' if f.get('fitness') else ''
         ac=' changed' if flags.get('alerts') else ''
         panels.append(f'''<div class="day" data-date="{k}"><section class="card{sc}"><h2>⛸ <a href="{SRC['ice']}">Public skating</a></h2><div class="big">{esc(skate)}</div></section><section class="card{ac}"><h2>🏋️ <a href="{SRC['hours']}">Gym · Recreation Center</a></h2>{box('rec','Hours',h['rec'])}{alert_list('gym')}</section><section class="card{ac}"><h2>🧗 <a href="{SRC['hours']}">RockWell</a></h2>{box('rock','Hours',h['rock'])}{alert_list('rock')}</section><section class="card{ac}"><h2>🏊 <a href="{SRC['hours']}">Pools</a></h2><div class="grid">{box('boyden','Boyden Pool',h['boyden'])}{box('hicks','Curry Hicks Pool',h['hicks'])}</div>{alert_list('pools')}</section><section class="card{fc}{ac}"><h2>🧘 <a href="{SRC['fitness']}">Selected group fitness</a></h2>{''.join(fit)}{alert_list('fitness')}</section></div>''')
     updated=NOW.strftime('%a %b %-d, %-I:%M %p ET')
     warn=('Fitness parser warning: '+esc(serr)+'<br>' if serr else '')+('Skating parser warning: '+esc(skerr) if skerr else '')
-    page=f'''<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UMass Activity Dashboard</title><style>*{{box-sizing:border-box}}body{{margin:0;background:#f4f6f8;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}}main{{max-width:680px;margin:auto;padding:16px 11px 40px}}a{{color:#1f4b99;text-decoration:none}}.top{{display:flex;justify-content:space-between;align-items:center;gap:8px}}.stamp,.muted{{font-size:12px;color:#667085}}.actions{{display:flex;gap:6px}}button,.btn{{font:inherit;font-size:12px;font-weight:700;border:1px solid #d5d9df;border-radius:10px;background:white;padding:8px 9px;color:#111827}}.nav{{display:grid;grid-template-columns:42px 1fr 42px;gap:8px;align-items:center;margin:11px 0}}.nav h1{{font-size:27px;text-align:center;margin:0}}.arrow{{font-size:22px}}.card{{background:white;border:1px solid #e6e8ec;border-radius:16px;margin:10px 0;padding:15px}}h2{{font-size:17px;margin:0 0 11px}}.big{{font-size:18px;font-weight:700}}.grid{{display:grid;grid-template-columns:1fr 1fr;gap:9px}}.mini{{background:#f8f9fb;border-radius:11px;padding:10px}}.mini span{{display:block;color:#667085;font-size:12px}}.mini b{{display:block;font-size:14px;margin-top:4px}}.alerts{{font-size:12px;color:#7a4d00;margin:10px 0 0;padding-left:20px}}.alerts li{{margin-top:5px}}.classrow{{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:11px 0;border-top:1px solid #e6e8ec;color:#111827}}.classrow small{{display:block;color:#667085;font-size:12px;margin-top:3px}}.pill{{flex:none;font-size:11px;font-weight:700;padding:5px 8px;border-radius:999px;background:#e9f5ef;color:#176b47;max-width:145px;text-align:center}}.pill.full{{background:#fbeaea;color:#a12b2b}}.day{{display:none}}.day.active{{display:block}}.changed{{background:#fff1a8!important}}.notice{{font-size:11px;color:#755800;background:#fff8d8;border-radius:10px;padding:8px 10px}}footer{{font-size:11px;color:#667085;line-height:1.45;padding:8px 2px}}</style></head><body><main><div class="top"><div class="stamp">Updated <b>{esc(updated)}</b></div><div class="actions"><button onclick="location.reload()">Refresh</button><a class="btn" id="updateNow" target="_blank">Update now ↗</a></div></div><div class="nav"><button class="arrow" id="prev">‹</button><h1 id="title"></h1><button class="arrow" id="next">›</button></div><div class="notice">Update now opens GitHub Actions securely. Tap <b>Run workflow</b>, then return here and refresh after it finishes.</div>{''.join(panels)}<footer>Yellow = newly detected change; it clears on the next unchanged update.<br>Availability: 8 AM checks today + tomorrow; 8 PM checks tomorrow + the following day.<br>{warn}</footer></main><script>const labels={json.dumps(labels)};const dates={json.dumps([d.isoformat() for d in dates])};let idx={TODAY.weekday()};function show(i){{idx=Math.max(0,Math.min(6,i));document.querySelectorAll('.day').forEach(x=>x.classList.remove('active'));document.querySelector('[data-date="'+dates[idx]+'"]').classList.add('active');document.getElementById('title').textContent=labels[idx];document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===6}}document.getElementById('prev').onclick=()=>show(idx-1);document.getElementById('next').onclick=()=>show(idx+1);show(idx);const parts=location.pathname.split('/').filter(Boolean);const owner=location.hostname.split('.')[0];document.getElementById('updateNow').href=(location.hostname.endsWith('.github.io')&&parts.length)?'https://github.com/'+owner+'/'+parts[0]+'/actions/workflows/update.yml':'https://github.com/';</script></body></html>'''
+    page=f'''<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UMass Activity Dashboard</title><style>*{{box-sizing:border-box}}body{{margin:0;background:#f4f6f8;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}}main{{max-width:680px;margin:auto;padding:16px 11px 40px}}a{{color:#1f4b99;text-decoration:none}}.top{{display:flex;justify-content:space-between;align-items:center;gap:8px}}.stamp,.muted{{font-size:12px;color:#667085}}.actions{{display:flex;gap:6px}}button,.btn{{font:inherit;font-size:12px;font-weight:700;border:1px solid #d5d9df;border-radius:10px;background:white;padding:8px 9px;color:#111827}}.nav{{display:grid;grid-template-columns:42px 1fr 42px;gap:8px;align-items:center;margin:11px 0}}.nav h1{{font-size:27px;text-align:center;margin:0}}.arrow{{font-size:22px}}.card{{background:white;border:1px solid #e6e8ec;border-radius:16px;margin:10px 0;padding:15px}}h2{{font-size:17px;margin:0 0 11px}}.big{{font-size:18px;font-weight:700}}.grid{{display:grid;grid-template-columns:1fr 1fr;gap:9px}}.mini{{background:#f8f9fb;border-radius:11px;padding:10px}}.mini span{{display:block;color:#667085;font-size:12px}}.mini b{{display:block;font-size:14px;margin-top:4px}}.alerts{{font-size:12px;color:#7a4d00;margin:10px 0 0;padding-left:20px}}.alerts li{{margin-top:5px}}.classrow{{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:11px 0;border-top:1px solid #e6e8ec;color:#111827}}.classrow small{{display:block;color:#667085;font-size:12px;margin-top:3px}}.pill{{flex:none;font-size:11px;font-weight:700;padding:5px 8px;border-radius:999px;background:#e9f5ef;color:#176b47;max-width:145px;text-align:center}}.pill.full{{background:#fbeaea;color:#a12b2b}}.day{{display:none}}.day.active{{display:block}}.changed{{background:#fff1a8!important}}.notice{{font-size:11px;color:#755800;background:#fff8d8;border-radius:10px;padding:8px 10px}}footer{{font-size:11px;color:#667085;line-height:1.45;padding:8px 2px}}</style></head><body><main><div class="top"><div class="stamp">Updated <b>{esc(updated)}</b></div><div class="actions"><button onclick="location.reload()">Refresh</button><a class="btn" id="updateNow" target="_blank">Update now ↗</a></div></div><div class="nav"><button class="arrow" id="prev">‹</button><h1 id="title"></h1><button class="arrow" id="next">›</button></div><div class="notice">Update now opens GitHub Actions securely. Tap <b>Run workflow</b>, then return here and refresh after it finishes.</div>{''.join(panels)}<footer>Yellow = newly detected change; it clears on the next unchanged update.<br>Availability is read directly from UMass for its published registration window.<br>{warn}</footer></main><script>const labels={json.dumps(labels)};const dates={json.dumps([d.isoformat() for d in dates])};let idx={TODAY.weekday()};function show(i){{idx=Math.max(0,Math.min(6,i));document.querySelectorAll('.day').forEach(x=>x.classList.remove('active'));document.querySelector('[data-date="'+dates[idx]+'"]').classList.add('active');document.getElementById('title').textContent=labels[idx];document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===6}}document.getElementById('prev').onclick=()=>show(idx-1);document.getElementById('next').onclick=()=>show(idx+1);show(idx);const parts=location.pathname.split('/').filter(Boolean);const owner=location.hostname.split('.')[0];document.getElementById('updateNow').href=(location.hostname.endsWith('.github.io')&&parts.length)?'https://github.com/'+owner+'/'+parts[0]+'/actions/workflows/update.yml':'https://github.com/';</script></body></html>'''
     (ROOT/'index.html').write_text(page)
 
 def main():
