@@ -1,5 +1,5 @@
 import unittest
-from datetime import date
+from datetime import date, datetime
 
 import update_dashboard as dashboard
 
@@ -8,13 +8,13 @@ class ParserTests(unittest.TestCase):
     def test_schedule_excludes_morning_and_uses_room_registration_link(self):
         page = """
         <h2>Morning | Class Start Times: 7:00am - 11:45am</h2>
-        <h3>Monday</h3>
-        <div><p>Pilates 60</p><p>Instructor</p><p>7:30am - 8:30am</p>
-        <a href="https://recwell.umass.edu/Program/GetProgramDetails?courseId=pilates">Room 215</a></div>
+        <section class="day"><h3>Monday</h3><article class="event">
+        <div class="event-title">Pilates 60</div><div class="event-time">7:30am - 8:30am</div>
+        <a class="event-studio" href="https://recwell.umass.edu/Program/GetProgramDetails?courseId=pilates">Room 215</a></article></section>
         <h2>Afternoon | Class Start Times: 12:00pm - 4:45pm</h2>
-        <h3>Tuesday</h3>
-        <div><p>Vinyasa Yoga 60</p><p>Instructor</p><p>4:30pm - 5:30pm</p>
-        <a href="/program/GetProgramDetails?courseId=yoga">Room 210</a></div>
+        <section class="day"><h3>Tuesday</h3><article class="event">
+        <div class="event-title">Vinyasa Yoga 60</div><div class="event-time">4:30pm - 5:30pm</div>
+        <a class="event-studio" href="/program/GetProgramDetails?courseId=yoga">Room 210</a></article></section>
         """
         days = dashboard.parse_schedule(page)
         self.assertEqual(days['Monday'], [])
@@ -45,6 +45,11 @@ class ParserTests(unittest.TestCase):
           data-instance-times="4:30 PM - 5:30 PM"><div class="spots-tag">7 spots available</div></div>'''
         found=dashboard.parse_availability_html(page)
         self.assertEqual(found[('2026-09-10',dashboard.ptime('4:30pm'))],'7 spots available')
+
+    def test_after_8pm_opens_tomorrow_and_keeps_today_available(self):
+        dates=[date(2026,9,7+i) for i in range(7)]
+        self.assertEqual(dashboard.initial_day_index(dates,datetime(2026,9,9,20,0)),3)
+        self.assertEqual(dates[2],date(2026,9,9))
 
 
 if __name__ == '__main__':

@@ -97,29 +97,27 @@ TIME_RE=re.compile(r'(\d{1,2}(?::\d{2})?\s*[ap]\.?m\.?)\s*[-–—]\s*(\d{1,2}(?
 ROOM_RE=re.compile(r'Room\s+\d+(?:/\d+)?',re.I)
 
 def parse_schedule(page_html):
-        soup=BeautifulSoup(page_html,'html.parser')
-        lines=[norm(x) for x in soup.get_text('\n').splitlines() if norm(x)]
-        links={}
-        for a in soup.find_all('a',href=True):
-            if not ROOM_RE.search(norm(a.get_text(' ',strip=True))):continue
-            for s in a.find_all_previous(string=True,limit=8):
-                name=norm(str(s))
-                if name in WANTED:
-                    links[name]=requests.compat.urljoin(SRC['fitness'],a['href']);break
-        days={d:[] for d in ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']}
-        section=day=None
-        for i,line in enumerate(lines):
-            if line.startswith('Morning |'):section='Morning'
-            elif line.startswith('Afternoon |'):section='Afternoon'
-            elif line.startswith('Evening |'):section='Evening'
-            elif line in days:day=line
-            elif line in WANTED and day and section in ('Afternoon','Evening'):
-                window=lines[i+1:i+9]; tm=next((TIME_RE.search(x) for x in window if TIME_RE.search(x)),None)
-                if not tm:continue
-                room=next((ROOM_RE.search(x).group(0) for x in window if ROOM_RE.search(x)),'')
-                item={'name':line,'start':tm.group(1).replace(' ',''),'end':tm.group(2).replace(' ',''),'room':room,'url':links.get(line,SRC['fitness'])}
-                if item not in days[day]:days[day].append(item)
-        return days
+    soup=BeautifulSoup(page_html,'html.parser')
+    days={d:[] for d in ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']}
+    for article in soup.select('article.event'):
+        name_node=article.select_one('.event-title')
+        time_node=article.select_one('.event-time')
+        day_node=article.find_parent('section',class_='day')
+        period_node=article.find_previous('h2')
+        if not (name_node and time_node and day_node and period_node):continue
+        name=norm(name_node.get_text(' ',strip=True));day_heading=day_node.find(['h3','h4'])
+        day=norm(day_heading.get_text(' ',strip=True)) if day_heading else ''
+        period=norm(period_node.get_text(' ',strip=True)).split('|',1)[0].strip()
+        if name not in WANTED or day not in days or period not in ('Afternoon','Evening'):continue
+        tm=TIME_RE.search(norm(time_node.get_text(' ',strip=True)))
+        if not tm:continue
+        link=article.select_one('a.event-studio[href]') or article.find('a',href=True)
+        room=ROOM_RE.search(norm(link.get_text(' ',strip=True))) if link else None
+        item={'name':name,'start':tm.group(1).replace(' ',''),'end':tm.group(2).replace(' ',''),
+              'room':room.group(0) if room else '',
+              'url':requests.compat.urljoin(SRC['fitness'],link['href']) if link else SRC['fitness']}
+        if item not in days[day]:days[day].append(item)
+    return days
 
 def refresh_schedule(old):
     try:
@@ -242,8 +240,14 @@ def changes(prev,cur):
 
 def esc(x):return html.escape(str(x or ''))
 
+def initial_day_index(dates,now=NOW):
+    target=now.date()+timedelta(days=1 if now.hour>=20 else 0)
+    return dates.index(target)
+
 def render(schedule,av,skating,alerts,flags,skerr,serr):
-    dates=week_dates();labels=[d.strftime('%a, %b %-d') for d in dates];panels=[]
+    dates=week_dates()
+    if NOW.hour>=20 and TODAY==dates[-1]:dates.append(TODAY+timedelta(days=1))
+    labels=[d.strftime('%a, %b %-d') for d in dates];initial_idx=initial_day_index(dates);panels=[]
     for d in dates:
         k=d.isoformat();f=flags.get(k,{});h=regular_hours(d)
         skate=' · '.join(skating.get(k,[])) or ('No public skating listed' if not skerr else 'Schedule check unavailable')
@@ -273,7 +277,7 @@ def render(schedule,av,skating,alerts,flags,skerr,serr):
         panels.append(f'''<div class="day" data-date="{k}"><section class="card{sc}"><h2>⛸ <a href="{SRC['ice']}">Public skating</a></h2><div class="big">{esc(skate)}</div></section><section class="card{ac}"><h2>🏋️ <a href="{SRC['hours']}">Gym · Recreation Center</a></h2>{box('rec','Hours',h['rec'])}{alert_list('gym')}</section><section class="card{ac}"><h2>🧗 <a href="{SRC['hours']}">RockWell</a></h2>{box('rock','Hours',h['rock'])}{alert_list('rock')}</section><section class="card{ac}"><h2>🏊 <a href="{SRC['hours']}">Pools</a></h2><div class="grid">{box('boyden','Boyden Pool',h['boyden'])}{box('hicks','Curry Hicks Pool',h['hicks'])}</div>{alert_list('pools')}</section><section class="card{fc}{ac}"><h2>🧘 <a href="{SRC['fitness']}">Selected group fitness</a></h2>{''.join(fit)}{alert_list('fitness')}</section></div>''')
     updated=NOW.strftime('%a %b %-d, %-I:%M %p ET')
     warn=('Fitness parser warning: '+esc(serr)+'<br>' if serr else '')+('Skating parser warning: '+esc(skerr) if skerr else '')
-    page=f'''<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UMass Activity Dashboard</title><style>*{{box-sizing:border-box}}body{{margin:0;background:#f4f6f8;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}}main{{max-width:680px;margin:auto;padding:16px 11px 40px}}a{{color:#1f4b99;text-decoration:none}}.top{{display:flex;justify-content:space-between;align-items:center;gap:8px}}.stamp,.muted{{font-size:12px;color:#667085}}.actions{{display:flex;gap:6px}}button,.btn{{font:inherit;font-size:12px;font-weight:700;border:1px solid #d5d9df;border-radius:10px;background:white;padding:8px 9px;color:#111827}}.nav{{display:grid;grid-template-columns:42px 1fr 42px;gap:8px;align-items:center;margin:11px 0}}.nav h1{{font-size:27px;text-align:center;margin:0}}.arrow{{font-size:22px}}.card{{background:white;border:1px solid #e6e8ec;border-radius:16px;margin:10px 0;padding:15px}}h2{{font-size:17px;margin:0 0 11px}}.big{{font-size:18px;font-weight:700}}.grid{{display:grid;grid-template-columns:1fr 1fr;gap:9px}}.mini{{background:#f8f9fb;border-radius:11px;padding:10px}}.mini span{{display:block;color:#667085;font-size:12px}}.mini b{{display:block;font-size:14px;margin-top:4px}}.alerts{{font-size:12px;color:#7a4d00;margin:10px 0 0;padding-left:20px}}.alerts li{{margin-top:5px}}.classrow{{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:11px 0;border-top:1px solid #e6e8ec;color:#111827}}.classrow small{{display:block;color:#667085;font-size:12px;margin-top:3px}}.pill{{flex:none;font-size:11px;font-weight:700;padding:5px 8px;border-radius:999px;background:#e9f5ef;color:#176b47;max-width:145px;text-align:center}}.pill.full{{background:#fbeaea;color:#a12b2b}}.day{{display:none}}.day.active{{display:block}}.changed{{background:#fff1a8!important}}.notice{{font-size:11px;color:#755800;background:#fff8d8;border-radius:10px;padding:8px 10px}}footer{{font-size:11px;color:#667085;line-height:1.45;padding:8px 2px}}</style></head><body><main><div class="top"><div class="stamp">Updated <b>{esc(updated)}</b></div><div class="actions"><button onclick="location.reload()">Refresh</button><a class="btn" id="updateNow" target="_blank">Update now ↗</a></div></div><div class="nav"><button class="arrow" id="prev">‹</button><h1 id="title"></h1><button class="arrow" id="next">›</button></div><div class="notice">Update now opens GitHub Actions securely. Tap <b>Run workflow</b>, then return here and refresh after it finishes.</div>{''.join(panels)}<footer>Yellow = newly detected change; it clears on the next unchanged update.<br>Availability is read directly from UMass for its published registration window.<br>{warn}</footer></main><script>const labels={json.dumps(labels)};const dates={json.dumps([d.isoformat() for d in dates])};let idx={TODAY.weekday()};function show(i){{idx=Math.max(0,Math.min(6,i));document.querySelectorAll('.day').forEach(x=>x.classList.remove('active'));document.querySelector('[data-date="'+dates[idx]+'"]').classList.add('active');document.getElementById('title').textContent=labels[idx];document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===6}}document.getElementById('prev').onclick=()=>show(idx-1);document.getElementById('next').onclick=()=>show(idx+1);show(idx);const parts=location.pathname.split('/').filter(Boolean);const owner=location.hostname.split('.')[0];document.getElementById('updateNow').href=(location.hostname.endsWith('.github.io')&&parts.length)?'https://github.com/'+owner+'/'+parts[0]+'/actions/workflows/update.yml':'https://github.com/';</script></body></html>'''
+    page=f'''<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UMass Activity Dashboard</title><style>*{{box-sizing:border-box}}body{{margin:0;background:#f4f6f8;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}}main{{max-width:680px;margin:auto;padding:16px 11px 40px}}a{{color:#1f4b99;text-decoration:none}}.top{{display:flex;justify-content:space-between;align-items:center;gap:8px}}.stamp,.muted{{font-size:12px;color:#667085}}.actions{{display:flex;gap:6px}}button,.btn{{font:inherit;font-size:12px;font-weight:700;border:1px solid #d5d9df;border-radius:10px;background:white;padding:8px 9px;color:#111827}}.nav{{display:grid;grid-template-columns:42px 1fr 42px;gap:8px;align-items:center;margin:11px 0}}.nav h1{{font-size:27px;text-align:center;margin:0}}.arrow{{font-size:22px}}.card{{background:white;border:1px solid #e6e8ec;border-radius:16px;margin:10px 0;padding:15px}}h2{{font-size:17px;margin:0 0 11px}}.big{{font-size:18px;font-weight:700}}.grid{{display:grid;grid-template-columns:1fr 1fr;gap:9px}}.mini{{background:#f8f9fb;border-radius:11px;padding:10px}}.mini span{{display:block;color:#667085;font-size:12px}}.mini b{{display:block;font-size:14px;margin-top:4px}}.alerts{{font-size:12px;color:#7a4d00;margin:10px 0 0;padding-left:20px}}.alerts li{{margin-top:5px}}.classrow{{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:11px 0;border-top:1px solid #e6e8ec;color:#111827}}.classrow small{{display:block;color:#667085;font-size:12px;margin-top:3px}}.pill{{flex:none;font-size:11px;font-weight:700;padding:5px 8px;border-radius:999px;background:#e9f5ef;color:#176b47;max-width:145px;text-align:center}}.pill.full{{background:#fbeaea;color:#a12b2b}}.day{{display:none}}.day.active{{display:block}}.changed{{background:#fff1a8!important}}.notice{{font-size:11px;color:#755800;background:#fff8d8;border-radius:10px;padding:8px 10px}}footer{{font-size:11px;color:#667085;line-height:1.45;padding:8px 2px}}</style></head><body><main><div class="top"><div class="stamp">Updated <b>{esc(updated)}</b></div><div class="actions"><button onclick="location.reload()">Refresh</button><a class="btn" id="updateNow" target="_blank">Update now ↗</a></div></div><div class="nav"><button class="arrow" id="prev">‹</button><h1 id="title"></h1><button class="arrow" id="next">›</button></div><div class="notice">Update now opens GitHub Actions securely. Tap <b>Run workflow</b>, then return here and refresh after it finishes.</div>{''.join(panels)}<footer>Yellow = newly detected change; it clears on the next unchanged update.<br>Availability is read directly from UMass for its published registration window.<br>{warn}</footer></main><script>const labels={json.dumps(labels)};const dates={json.dumps([d.isoformat() for d in dates])};let idx={initial_idx};function show(i){{idx=Math.max(0,Math.min(dates.length-1,i));document.querySelectorAll('.day').forEach(x=>x.classList.remove('active'));document.querySelector('[data-date="'+dates[idx]+'"]').classList.add('active');document.getElementById('title').textContent=labels[idx];document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===dates.length-1}}document.getElementById('prev').onclick=()=>show(idx-1);document.getElementById('next').onclick=()=>show(idx+1);show(idx);const parts=location.pathname.split('/').filter(Boolean);const owner=location.hostname.split('.')[0];document.getElementById('updateNow').href=(location.hostname.endsWith('.github.io')&&parts.length)?'https://github.com/'+owner+'/'+parts[0]+'/actions/workflows/update.yml':'https://github.com/';</script></body></html>'''
     (ROOT/'index.html').write_text(page)
 
 def main():
