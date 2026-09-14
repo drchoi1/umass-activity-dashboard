@@ -25,6 +25,13 @@
     }
   }
 
+  window.hardRefreshDashboard = function () {
+    const next = new URL(window.location.href);
+    next.searchParams.delete('_fresh');
+    next.searchParams.set('v', Date.now());
+    window.location.replace(next.href);
+  };
+
   window.addEventListener('pageshow', checkFreshness);
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden) checkFreshness();
