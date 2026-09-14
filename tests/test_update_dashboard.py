@@ -1,5 +1,5 @@
 import unittest
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import update_dashboard as dashboard
 
@@ -50,6 +50,11 @@ class ParserTests(unittest.TestCase):
         dates=[date(2026,9,7+i) for i in range(7)]
         self.assertEqual(dashboard.initial_day_index(dates,datetime(2026,9,9,20,0)),3)
         self.assertEqual(dates[2],date(2026,9,9))
+
+    def test_dashboard_covers_current_and_following_week(self):
+        dates=dashboard.week_dates()
+        self.assertEqual(len(dates),14)
+        self.assertEqual(dates[-1]-dates[0],timedelta(days=13))
 
 
 if __name__ == '__main__':

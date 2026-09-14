@@ -34,7 +34,8 @@ def fmt(s):
     return datetime.combine(date.today(),t).strftime('%-I:%M %p').replace(':00 ',' ') if t else s
 
 def week_dates():
-    m=TODAY-timedelta(days=TODAY.weekday()); return [m+timedelta(days=i) for i in range(7)]
+    m=TODAY-timedelta(days=TODAY.weekday())
+    return [m+timedelta(days=i) for i in range(14)]
 
 def regular_hours(d):
     w=d.weekday()
@@ -246,7 +247,6 @@ def initial_day_index(dates,now=NOW):
 
 def render(schedule,av,skating,alerts,flags,skerr,serr):
     dates=week_dates()
-    if NOW.hour>=20 and TODAY==dates[-1]:dates.append(TODAY+timedelta(days=1))
     labels=[d.strftime('%a, %b %-d') for d in dates];initial_idx=initial_day_index(dates);panels=[]
     for d in dates:
         k=d.isoformat();f=flags.get(k,{});h=regular_hours(d)
