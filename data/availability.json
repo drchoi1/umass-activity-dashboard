@@ -130,19 +130,25 @@
   "2026-09-17": {
     "Pilates 60|3:30pm": {
       "availability": "No spots available",
-      "checked_at": "2026-09-16T22:52:43.727843-04:00"
+      "checked_at": "2026-09-17T02:30:18.585951-04:00"
     },
     "Pilates 60|6:00pm": {
       "availability": "No spots available",
-      "checked_at": "2026-09-16T22:52:43.727843-04:00"
+      "checked_at": "2026-09-17T02:30:18.585951-04:00"
     },
     "Zumba 60|5:45pm": {
-      "availability": "14 Spots available",
-      "checked_at": "2026-09-16T22:52:43.727843-04:00"
+      "availability": "13 Spots available",
+      "checked_at": "2026-09-17T02:30:18.585951-04:00"
     },
     "Slow Flow Yoga 60|4:00pm": {
-      "availability": "15 Spots available",
-      "checked_at": "2026-09-16T22:52:43.727843-04:00"
+      "availability": "10 Spots available",
+      "checked_at": "2026-09-17T02:30:18.585951-04:00"
+    }
+  },
+  "2026-09-19": {
+    "Pilates 60|3:00pm": {
+      "availability": "Availability unavailable",
+      "checked_at": "2026-09-17T02:30:18.585951-04:00"
     }
   }
 }
