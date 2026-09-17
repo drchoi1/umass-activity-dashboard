@@ -56,6 +56,19 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(len(dates),14)
         self.assertEqual(dates[-1]-dates[0],timedelta(days=13))
 
+    def test_skating_events_use_finnly_dates_across_both_weeks(self):
+        dates=[date(2026,9,14)+timedelta(days=i) for i in range(14)]
+        events=[
+            {'EventTypeName':'Public Skating','EventStartTime':'2026-09-15T11:10:00','EventEndTime':'2026-09-15T12:30:00','Closed':False},
+            {'EventTypeName':'Public Skating','EventStartTime':'2026-09-22T16:00:00','EventEndTime':'2026-09-22T16:50:00','Closed':False},
+            {'EventTypeName':'Public Skating','EventStartTime':'2026-09-15T09:00:00','EventEndTime':'2026-09-15T10:00:00','Closed':True},
+            {'EventTypeName':'Private Rental','EventStartTime':'2026-09-15T13:00:00','EventEndTime':'2026-09-15T14:00:00','Closed':False},
+        ]
+        result=dashboard.parse_skating_events(events,dates)
+        self.assertEqual(result['2026-09-15'],['11:10 AM–12:30 PM'])
+        self.assertEqual(result['2026-09-22'],['4:00 PM–4:50 PM'])
+        self.assertEqual(result['2026-09-16'],[])
+
 
 if __name__ == '__main__':
     unittest.main()

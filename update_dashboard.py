@@ -129,35 +129,33 @@ def refresh_schedule(old):
 
 MONTHS='January|February|March|April|May|June|July|August|September|October|November|December'
 DATE_RE=re.compile(rf'({MONTHS})\s+(\d{{1,2}})(?:,\s*(\d{{4}}))?',re.I)
-SKATE_RE=re.compile(r'(\d{1,2}(?::\d{2})?\s*[AP]\.?M\.?)\s*(?:-|–|—|to)\s*(\d{1,2}(?::\d{2})?\s*[AP]\.?M\.?)',re.I)
 
-def parse_date_text(s):
-    m=DATE_RE.search(s)
-    if not m:return None
-    try:return datetime.strptime(f'{m.group(1)} {m.group(2)} {m.group(3) or TODAY.year}','%B %d %Y').date()
-    except ValueError:return None
+def parse_skating_events(events,dates):
+    result={d.isoformat():[] for d in dates}
+    for event in events:
+        if event.get('EventTypeName')!='Public Skating' or event.get('Closed'):continue
+        try:
+            start=datetime.fromisoformat(event['EventStartTime'])
+            end=datetime.fromisoformat(event['EventEndTime'])
+        except (KeyError,TypeError,ValueError):continue
+        day=start.date().isoformat()
+        if day not in result or end<=start or end.date()!=start.date():continue
+        label=f"{start.strftime('%-I:%M %p')}–{end.strftime('%-I:%M %p')}"
+        result[day].append((start,label))
+    return {day:[label for _,label in sorted(set(items))] for day,items in result.items()}
 
 def skating_week():
-    result={d.isoformat():[] for d in week_dates()}; wanted=set(week_dates())
+    dates=week_dates(); result={d.isoformat():[] for d in dates}
     try:
         from playwright.sync_api import sync_playwright
         with sync_playwright() as p:
             b=p.chromium.launch(headless=True); pg=b.new_page(viewport={'width':1400,'height':1000})
-            pg.goto(SRC['ice_finnly'],wait_until='networkidle',timeout=90000); pg.wait_for_timeout(1500)
-            for sel in ('.fc-list-button',"button:has-text('List')"):
-                try:
-                    q=pg.locator(sel).first
-                    if q.count() and q.is_visible():q.click(timeout=4000);pg.wait_for_timeout(1000);break
-                except Exception:pass
-            current=None
-            for line in [norm(x) for x in pg.locator('body').inner_text().splitlines() if norm(x)]:
-                d=parse_date_text(line)
-                if d:current=d
-                m=SKATE_RE.search(line)
-                if m and current in wanted:result[current.isoformat()].append(f'{fmt(m.group(1))}–{fmt(m.group(2))}')
+            pg.goto(SRC['ice_finnly'],wait_until='networkidle',timeout=90000)
+            pg.wait_for_function("typeof _onlineScheduleList !== 'undefined' && Array.isArray(_onlineScheduleList)",timeout=15000)
+            pg.locator('.time-period-option[option="week"]').click(timeout=10000)
+            events=pg.evaluate('() => _onlineScheduleList')
             b.close()
-        for k in result:result[k]=sorted(set(result[k]))
-        return result,None
+        return parse_skating_events(events,dates),None
     except Exception as e:return result,str(e)
 
 SPOTS=[re.compile(r'(\d+)\s+spots?\s+(?:available|remaining)',re.I),
