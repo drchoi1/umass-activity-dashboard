@@ -5,210 +5,6 @@
     "pools": [],
     "fitness": []
   },
-  "2026-09-14": {
-    "hours": {
-      "rec": "6:00 AM–11:00 PM",
-      "rock": "12:00 PM–10:00 PM",
-      "boyden": "11:00 AM–12:30 PM",
-      "hicks": "6:30–8:30 AM · 12–3 PM · 5:30–7 PM"
-    },
-    "skating": [],
-    "fitness": [
-      {
-        "name": "Pilates 60",
-        "start": "12:15pm",
-        "end": "1:15pm",
-        "room": "Room 215"
-      },
-      {
-        "name": "Slow Flow Yoga 60",
-        "start": "4:00pm",
-        "end": "5:00pm",
-        "room": "Room 210"
-      },
-      {
-        "name": "Pilates 60",
-        "start": "6:30pm",
-        "end": "7:30pm",
-        "room": "Room 215"
-      },
-      {
-        "name": "Yin Yoga 60",
-        "start": "7:30pm",
-        "end": "8:30pm",
-        "room": "Room 210"
-      },
-      {
-        "name": "Zumba 60",
-        "start": "7:45pm",
-        "end": "8:45pm",
-        "room": "Room 215"
-      }
-    ]
-  },
-  "2026-09-15": {
-    "hours": {
-      "rec": "6:00 AM–11:00 PM",
-      "rock": "12:00 PM–10:00 PM",
-      "boyden": "11:00 AM–12:30 PM",
-      "hicks": "12–3 PM"
-    },
-    "skating": [
-      "11:10 AM–12:30 PM"
-    ],
-    "fitness": [
-      {
-        "name": "Pilates 60",
-        "start": "4:30pm",
-        "end": "5:30pm",
-        "room": "Room 215"
-      },
-      {
-        "name": "Vinyasa Yoga 60",
-        "start": "6:45pm",
-        "end": "7:45pm",
-        "room": "Room 210"
-      },
-      {
-        "name": "Pilates 60",
-        "start": "8:00pm",
-        "end": "9:00pm",
-        "room": "Room 210"
-      }
-    ]
-  },
-  "2026-09-16": {
-    "hours": {
-      "rec": "6:00 AM–11:00 PM",
-      "rock": "12:00 PM–10:00 PM",
-      "boyden": "11:00 AM–12:30 PM",
-      "hicks": "6:30–8:30 AM · 12–3 PM · 5:30–7 PM"
-    },
-    "skating": [],
-    "fitness": [
-      {
-        "name": "Pilates 60",
-        "start": "4:15pm",
-        "end": "5:15pm",
-        "room": "Room 215"
-      },
-      {
-        "name": "Zumba 60",
-        "start": "5:15pm",
-        "end": "6:15pm",
-        "room": "Room 118"
-      },
-      {
-        "name": "Vinyasa Yoga 60",
-        "start": "6:30pm",
-        "end": "7:30pm",
-        "room": "Room 210"
-      },
-      {
-        "name": "Pilates 60",
-        "start": "6:30pm",
-        "end": "7:30pm",
-        "room": "Room 215"
-      }
-    ]
-  },
-  "2026-09-17": {
-    "hours": {
-      "rec": "6:00 AM–11:00 PM",
-      "rock": "12:00 PM–10:00 PM",
-      "boyden": "11:00 AM–12:30 PM",
-      "hicks": "12–3 PM"
-    },
-    "skating": [],
-    "fitness": [
-      {
-        "name": "Pilates 60",
-        "start": "3:30pm",
-        "end": "4:30pm",
-        "room": "Room 215"
-      },
-      {
-        "name": "Slow Flow Yoga 60",
-        "start": "4:00pm",
-        "end": "5:00pm",
-        "room": "Room 210"
-      },
-      {
-        "name": "Zumba 60",
-        "start": "5:45pm",
-        "end": "6:45pm",
-        "room": "Room 118"
-      },
-      {
-        "name": "Pilates 60",
-        "start": "6:00pm",
-        "end": "7:00pm",
-        "room": "Room 215"
-      }
-    ]
-  },
-  "2026-09-18": {
-    "hours": {
-      "rec": "6:00 AM–10:00 PM",
-      "rock": "12:00 PM–8:00 PM",
-      "boyden": "11:00 AM–12:30 PM",
-      "hicks": "6:30–8:30 AM · 12–3 PM · 5:30–8:30 PM"
-    },
-    "skating": [],
-    "fitness": []
-  },
-  "2026-09-19": {
-    "hours": {
-      "rec": "10:00 AM–8:00 PM",
-      "rock": "12:00 PM–8:00 PM",
-      "boyden": "CLOSED",
-      "hicks": "8 AM–12 PM · 1–7 PM"
-    },
-    "skating": [],
-    "fitness": [
-      {
-        "name": "Pilates 60",
-        "start": "3:00pm",
-        "end": "4:00pm",
-        "room": "Room 215"
-      }
-    ]
-  },
-  "2026-09-20": {
-    "hours": {
-      "rec": "10:00 AM–8:00 PM",
-      "rock": "12:00 PM–8:00 PM",
-      "boyden": "CLOSED",
-      "hicks": "CLOSED"
-    },
-    "skating": [],
-    "fitness": [
-      {
-        "name": "Pilates 60",
-        "start": "12:15pm",
-        "end": "1:15pm",
-        "room": "Room 215"
-      },
-      {
-        "name": "Vinyasa Yoga 60",
-        "start": "12:15pm",
-        "end": "1:15pm",
-        "room": "Room 210"
-      },
-      {
-        "name": "Pilates 60",
-        "start": "4:15pm",
-        "end": "5:15pm",
-        "room": "Room 215"
-      },
-      {
-        "name": "Zumba 60",
-        "start": "5:30pm",
-        "end": "6:30pm",
-        "room": "Room 215"
-      }
-    ]
-  },
   "2026-09-21": {
     "hours": {
       "rec": "6:00 AM–11:00 PM",
@@ -399,16 +195,230 @@
     ],
     "fitness": [
       {
+        "name": "Vinyasa Yoga 60",
+        "start": "12:15pm",
+        "end": "1:15pm",
+        "room": "Room 210"
+      },
+      {
+        "name": "Pilates 60",
+        "start": "2:45pm",
+        "end": "3:45pm",
+        "room": "Room 215"
+      },
+      {
+        "name": "Pilates 60",
+        "start": "4:15pm",
+        "end": "5:15pm",
+        "room": "Room 215"
+      },
+      {
+        "name": "Zumba 60",
+        "start": "5:30pm",
+        "end": "6:30pm",
+        "room": "Room 215"
+      }
+    ]
+  },
+  "2026-09-28": {
+    "hours": {
+      "rec": "6:00 AM–11:00 PM",
+      "rock": "12:00 PM–10:00 PM",
+      "boyden": "11:00 AM–12:30 PM",
+      "hicks": "6:30–8:30 AM · 12–3 PM · 5:30–7 PM"
+    },
+    "skating": [],
+    "fitness": [
+      {
         "name": "Pilates 60",
         "start": "12:15pm",
         "end": "1:15pm",
         "room": "Room 215"
       },
       {
+        "name": "Slow Flow Yoga 60",
+        "start": "4:00pm",
+        "end": "5:00pm",
+        "room": "Room 210"
+      },
+      {
+        "name": "Pilates 60",
+        "start": "6:30pm",
+        "end": "7:30pm",
+        "room": "Room 215"
+      },
+      {
+        "name": "Yin Yoga 60",
+        "start": "7:30pm",
+        "end": "8:30pm",
+        "room": "Room 210"
+      },
+      {
+        "name": "Zumba 60",
+        "start": "7:45pm",
+        "end": "8:45pm",
+        "room": "Room 215"
+      }
+    ]
+  },
+  "2026-09-29": {
+    "hours": {
+      "rec": "6:00 AM–11:00 PM",
+      "rock": "12:00 PM–10:00 PM",
+      "boyden": "11:00 AM–12:30 PM",
+      "hicks": "12–3 PM"
+    },
+    "skating": [],
+    "fitness": [
+      {
+        "name": "Pilates 60",
+        "start": "4:30pm",
+        "end": "5:30pm",
+        "room": "Room 215"
+      },
+      {
+        "name": "Vinyasa Yoga 60",
+        "start": "6:45pm",
+        "end": "7:45pm",
+        "room": "Room 210"
+      },
+      {
+        "name": "Pilates 60",
+        "start": "8:00pm",
+        "end": "9:00pm",
+        "room": "Room 210"
+      }
+    ]
+  },
+  "2026-09-30": {
+    "hours": {
+      "rec": "6:00 AM–11:00 PM",
+      "rock": "12:00 PM–10:00 PM",
+      "boyden": "11:00 AM–12:30 PM",
+      "hicks": "6:30–8:30 AM · 12–3 PM · 5:30–7 PM"
+    },
+    "skating": [],
+    "fitness": [
+      {
+        "name": "Pilates 60",
+        "start": "4:15pm",
+        "end": "5:15pm",
+        "room": "Room 215"
+      },
+      {
+        "name": "Zumba 60",
+        "start": "5:15pm",
+        "end": "6:15pm",
+        "room": "Room 118"
+      },
+      {
+        "name": "Vinyasa Yoga 60",
+        "start": "6:30pm",
+        "end": "7:30pm",
+        "room": "Room 210"
+      },
+      {
+        "name": "Pilates 60",
+        "start": "6:30pm",
+        "end": "7:30pm",
+        "room": "Room 215"
+      }
+    ]
+  },
+  "2026-10-01": {
+    "hours": {
+      "rec": "6:00 AM–11:00 PM",
+      "rock": "12:00 PM–10:00 PM",
+      "boyden": "11:00 AM–12:30 PM",
+      "hicks": "12–3 PM"
+    },
+    "skating": [
+      "3:30 PM–4:20 PM",
+      "4:30 PM–5:20 PM"
+    ],
+    "fitness": [
+      {
+        "name": "Pilates 60",
+        "start": "3:30pm",
+        "end": "4:30pm",
+        "room": "Room 215"
+      },
+      {
+        "name": "Slow Flow Yoga 60",
+        "start": "4:00pm",
+        "end": "5:00pm",
+        "room": "Room 210"
+      },
+      {
+        "name": "Zumba 60",
+        "start": "5:45pm",
+        "end": "6:45pm",
+        "room": "Room 118"
+      },
+      {
+        "name": "Pilates 60",
+        "start": "6:00pm",
+        "end": "7:00pm",
+        "room": "Room 215"
+      }
+    ]
+  },
+  "2026-10-02": {
+    "hours": {
+      "rec": "6:00 AM–10:00 PM",
+      "rock": "12:00 PM–8:00 PM",
+      "boyden": "11:00 AM–12:30 PM",
+      "hicks": "6:30–8:30 AM · 12–3 PM · 5:30–8:30 PM"
+    },
+    "skating": [
+      "3:00 PM–3:50 PM",
+      "4:00 PM–4:50 PM"
+    ],
+    "fitness": []
+  },
+  "2026-10-03": {
+    "hours": {
+      "rec": "10:00 AM–8:00 PM",
+      "rock": "12:00 PM–8:00 PM",
+      "boyden": "CLOSED",
+      "hicks": "8 AM–12 PM · 1–7 PM"
+    },
+    "skating": [
+      "4:00 PM–4:50 PM",
+      "5:00 PM–5:50 PM"
+    ],
+    "fitness": [
+      {
+        "name": "Pilates 60",
+        "start": "3:00pm",
+        "end": "4:00pm",
+        "room": "Room 215"
+      }
+    ]
+  },
+  "2026-10-04": {
+    "hours": {
+      "rec": "10:00 AM–8:00 PM",
+      "rock": "12:00 PM–8:00 PM",
+      "boyden": "CLOSED",
+      "hicks": "CLOSED"
+    },
+    "skating": [
+      "2:50 PM–3:40 PM",
+      "3:50 PM–4:40 PM"
+    ],
+    "fitness": [
+      {
         "name": "Vinyasa Yoga 60",
         "start": "12:15pm",
         "end": "1:15pm",
         "room": "Room 210"
+      },
+      {
+        "name": "Pilates 60",
+        "start": "2:45pm",
+        "end": "3:45pm",
+        "room": "Room 215"
       },
       {
         "name": "Pilates 60",
