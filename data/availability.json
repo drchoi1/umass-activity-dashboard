@@ -190,47 +190,47 @@
   "2026-09-26": {
     "Pilates 60|3:00pm": {
       "availability": "No spots available",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     }
   },
   "2026-09-27": {
     "Pilates 60|2:45pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     },
     "Pilates 60|4:15pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     },
     "Vinyasa Yoga 60|12:15pm": {
-      "availability": "20 Spots available",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "availability": "14 Spots available",
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     },
     "Zumba 60|5:30pm": {
       "availability": "27 Spots available",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     }
   },
   "2026-09-28": {
     "Pilates 60|12:15pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     },
     "Pilates 60|6:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     },
     "Zumba 60|7:45pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     },
     "Slow Flow Yoga 60|4:00pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     },
     "Yin Yoga 60|7:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-09-26T00:49:22.766594-04:00"
+      "checked_at": "2026-09-26T12:18:01.160363-04:00"
     }
   }
 }
