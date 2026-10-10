@@ -381,48 +381,48 @@
   },
   "2026-10-10": {
     "Pilates 60|3:00pm": {
-      "availability": "13 Spots available",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "availability": "10 Spots available",
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     }
   },
   "2026-10-11": {
     "Pilates 60|2:45pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     },
     "Pilates 60|4:15pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     },
     "Vinyasa Yoga 60|12:15pm": {
-      "availability": "26 Spots available",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "availability": "24 Spots available",
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     },
     "Zumba 60|5:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     }
   },
   "2026-10-12": {
     "Pilates 60|12:15pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     },
     "Pilates 60|6:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     },
     "Zumba 60|7:45pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     },
     "Slow Flow Yoga 60|4:00pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     },
     "Yin Yoga 60|7:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-10T01:42:11.343465-04:00"
+      "checked_at": "2026-10-10T13:18:51.638956-04:00"
     }
   }
 }
