@@ -333,7 +333,9 @@
       "boyden": "11:00 AM–12:30 PM",
       "hicks": "12–3 PM"
     },
-    "skating": [],
+    "skating": [
+      "11:10 AM–12:30 PM"
+    ],
     "fitness": [
       {
         "name": "Pilates 60",
