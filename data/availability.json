@@ -501,56 +501,56 @@
   },
   "2026-10-19": {
     "Pilates 60|12:15pm": {
-      "availability": "No spots available",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "availability": "Availability unavailable",
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Pilates 60|6:30pm": {
       "availability": "No spots available",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Zumba 60|7:45pm": {
-      "availability": "24 Spots available",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "availability": "21 Spots available",
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Slow Flow Yoga 60|4:00pm": {
-      "availability": "14 Spots available",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "availability": "13 Spots available",
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Yin Yoga 60|7:30pm": {
-      "availability": "17 Spots available",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "availability": "12 Spots available",
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     }
   },
   "2026-10-20": {
     "Vinyasa Yoga 60|6:45pm": {
-      "availability": "25 Spots available",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "availability": "16 Spots available",
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Pilates 60|4:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Pilates 60|8:00pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     }
   },
   "2026-10-21": {
     "Pilates 60|4:15pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Pilates 60|6:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Zumba 60|5:15pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     },
     "Vinyasa Yoga 60|6:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-10-19T00:31:02.264547-04:00"
+      "checked_at": "2026-10-19T14:41:22.440667-04:00"
     }
   }
 }
