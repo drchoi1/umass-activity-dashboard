@@ -807,26 +807,26 @@
   },
   "2026-11-21": {
     "Pilates 60|3:00pm": {
-      "availability": "Availability unavailable",
-      "checked_at": "2026-11-20T03:26:28.060347-05:00"
+      "availability": "1 Spot available",
+      "checked_at": "2026-11-20T16:01:47.320927-05:00"
     }
   },
   "2026-11-22": {
     "Pilates 60|2:45pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-11-20T03:26:28.060347-05:00"
+      "checked_at": "2026-11-20T16:01:47.320927-05:00"
     },
     "Pilates 60|4:15pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-11-20T03:26:28.060347-05:00"
+      "checked_at": "2026-11-20T16:01:47.320927-05:00"
     },
     "Vinyasa Yoga 60|12:15pm": {
-      "availability": "Availability unavailable",
-      "checked_at": "2026-11-20T03:26:28.060347-05:00"
+      "availability": "29 Spots available",
+      "checked_at": "2026-11-20T16:01:47.320927-05:00"
     },
     "Zumba 60|5:30pm": {
       "availability": "Availability unavailable",
-      "checked_at": "2026-11-20T03:26:28.060347-05:00"
+      "checked_at": "2026-11-20T16:01:47.320927-05:00"
     }
   }
 }
